@@ -13,9 +13,9 @@ public class Token {
     @Override
     public String toString() {
         if (Table.isKeyword(value) || Table.isOperatprOrDelimiter(value)) {
-            return "<" + value + "," + "-" + ">";
+            return "<" + value + ", " + "-" + ">";
         } else {
-            return "<" + type + "," + value + ">";
+            return "<" + type + ", " + value + ">";
         }
     }
 

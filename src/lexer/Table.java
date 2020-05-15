@@ -9,11 +9,13 @@ import java.util.Map;
 
 public class Table {
     // 种别和属性值对照表
-    public static List<Token> NUMBER_TABLE = new ArrayList<>();
-    public static List<Token> IDENTIFIER_TABLE = new ArrayList<>();
+    public static Map<String, Integer> NUMBER_TABLE = new HashMap<>();
+    public static Map<String, Integer> IDENTIFIER_TABLE = new HashMap<>();
     public static Map<String, Integer> KEYWORD_TABLE = new HashMap<>();
     public static Map<String, Integer> OPERATOR_TABLE = new HashMap<>();
     public static Map<String, Integer> DELIMITER_TABLE = new HashMap<>();
+    public static int NUMBER_TABLE_POINTER = 0;
+    public static int IDENTIFIER_TABLE_POINTER = 0;
 
     static {
         KEYWORD_TABLE.put("begin", 1);
@@ -46,28 +48,32 @@ public class Table {
     }
 
     public static Token addNumber(Token token) {
-        Token temp = new Token(token.getType() + token.getValue(), String.valueOf(NUMBER_TABLE.size()));
-        NUMBER_TABLE.add(temp);
+        if (!NUMBER_TABLE.containsKey(token.getValue())) {
+            NUMBER_TABLE.put(token.getValue(), NUMBER_TABLE_POINTER++);
+        }
+        Token temp = new Token(token.getType() + token.getValue(), String.valueOf(NUMBER_TABLE.get(token.getValue())));
         return temp;
     }
 
     public static Token addIdentifier(Token token) {
-        Token temp = new Token(token.getType() + token.getValue(), String.valueOf(IDENTIFIER_TABLE.size()));
-        IDENTIFIER_TABLE.add(temp);
+        if (!IDENTIFIER_TABLE.containsKey(token.getValue())) {
+            IDENTIFIER_TABLE.put(token.getValue(), IDENTIFIER_TABLE_POINTER++);
+        }
+        Token temp = new Token(token.getType() + token.getValue(), String.valueOf(IDENTIFIER_TABLE.get(token.getValue())));
         return temp;
     }
-
-    public static Token addNumber(String value) {
-        Token temp = new Token("常数 " + value, String.valueOf(NUMBER_TABLE.size()));
-        NUMBER_TABLE.add(temp);
-        return temp;
-    }
-
-    public static Token addIdentifier(String value) {
-        Token temp = new Token("标识符 " + value, String.valueOf(IDENTIFIER_TABLE.size()));
-        IDENTIFIER_TABLE.add(temp);
-        return temp;
-    }
+//
+//    public static Token addNumber(String value) {
+//        Token temp = new Token("常数 " + value, String.valueOf(NUMBER_TABLE.size()));
+//        NUMBER_TABLE.add(temp);
+//        return temp;
+//    }
+//
+//    public static Token addIdentifier(String value) {
+//        Token temp = new Token("标识符 " + value, String.valueOf(IDENTIFIER_TABLE.size()));
+//        IDENTIFIER_TABLE.add(temp);
+//        return temp;
+//    }
 
     public static boolean isOperator(String str) {
         if (OPERATOR_TABLE.containsKey(str)) {

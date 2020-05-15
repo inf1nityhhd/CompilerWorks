@@ -43,12 +43,19 @@ public class LexicalAnalyzer {
                     break;
                 }
             } else {
+                if (Table.isDelimiter(String.valueOf(ch)) && curState == States.OPERATOR_OR_DELIMITER){
+                    temp = getCurrentToken();
+                    break;
+                }
                 if (isStateTansformed(States.OPERATOR_OR_DELIMITER)) {
                     temp = getCurrentToken();
                     break;
                 }
             }
             curPoint++;
+        }
+        if ((temp.getType() == "END") && basePoint <= curPoint && curPoint == content.length()) {
+            temp = getCurrentToken();
         }
         curState = States.BEGIN;
         basePoint = curPoint;
