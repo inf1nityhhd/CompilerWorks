@@ -62,18 +62,6 @@ public class Table {
         Token temp = new Token(token.getType() + token.getValue(), String.valueOf(IDENTIFIER_TABLE.get(token.getValue())));
         return temp;
     }
-//
-//    public static Token addNumber(String value) {
-//        Token temp = new Token("常数 " + value, String.valueOf(NUMBER_TABLE.size()));
-//        NUMBER_TABLE.add(temp);
-//        return temp;
-//    }
-//
-//    public static Token addIdentifier(String value) {
-//        Token temp = new Token("标识符 " + value, String.valueOf(IDENTIFIER_TABLE.size()));
-//        IDENTIFIER_TABLE.add(temp);
-//        return temp;
-//    }
 
     public static boolean isOperator(String str) {
         if (OPERATOR_TABLE.containsKey(str)) {
