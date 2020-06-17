@@ -21,7 +21,7 @@ public class SyntacticAnalyzer {
     private int curIndex = 0;
     private static HashSet<String> TERMINAL = new HashSet<String>();
     private static HashSet<String> NON_TERMINAL = new HashSet<String>();
-    private static HashMap<String, HashMap<String, List<String>>> ANALYZE_TABLE = new HashMap<>();
+    private HashMap<String, HashMap<String, List<String>>> ANALYZE_TABLE = new HashMap<>();
     private List<Token> tokens;
     private String curTop = "#";
 
@@ -41,7 +41,7 @@ public class SyntacticAnalyzer {
         NON_TERMINAL.add("F");
     }
 
-    private void initTable(){
+    private void initTable() {
         List<String> temp = new ArrayList<>();
         HashMap<String, List<String>> tempMap = new HashMap<>();
         temp.add("E'");
@@ -157,13 +157,27 @@ public class SyntacticAnalyzer {
     }
 
     public void parse() {
-        tokens.add(new Token("附加结束符#", "#"));
+        tokens.add(new Token("在输入串后附加的结束标记#", "#"));
         boolean isStop = false;
+        System.out.println("步骤\t 分析栈\t 输入串\t");
+        int step = 1;
         while (!isStop) {
+
+            String inputString = "";
+            for (Token t : tokens.subList(curIndex, tokens.size())) {
+                inputString += t.getValue();
+            }
+            StringBuffer sb = new StringBuffer();
+            String[] temp = S.toString().substring(1, S.toString().length() - 1).split(",");
+            for (int i = temp.length - 1; i != -1; i--) {
+                sb.append(temp[i]);
+            }
+            System.out.printf("%d\t %s\t %s\t \n", step, sb.toString(), inputString);
+
+
             curTop = S.pop();
-            System.out.println("top "+curTop);
             String curToken = getCurrentToken();
-            System.out.println("token "+curToken);
+            step++;
             if (TERMINAL.contains(curTop)) {
                 if (curTop.equals(curToken)) {
                     advance();
@@ -188,7 +202,7 @@ public class SyntacticAnalyzer {
                 break;
             }
         }
-        System.out.println("分析结束");
+        System.out.println("语法分析结束");
     }
 
     private boolean isInAnalyzeTable(String t1, String t2) {
