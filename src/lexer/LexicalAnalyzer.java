@@ -1,10 +1,8 @@
 package lexer;
 
-import com.sun.xml.internal.bind.v2.runtime.output.StAXExStreamWriterOutput;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class LexicalAnalyzer {
     private static LexicalAnalyzer LEXER = new LexicalAnalyzer();
@@ -21,10 +19,8 @@ public class LexicalAnalyzer {
         return LEXER;
     }
 
-    public void beginAnalysis(String text, int basePoint, int curPoint) {
+    public void beginAnalysis(String text) {
         this.content = text;
-        this.basePoint = basePoint;
-        this.curPoint = curPoint;
         this.curState = States.BEGIN;
     }
 
@@ -43,7 +39,7 @@ public class LexicalAnalyzer {
                     break;
                 }
             } else {
-                if (Table.isDelimiter(String.valueOf(ch)) && curState == States.OPERATOR_OR_DELIMITER){
+                if (Table.isDelimiter(String.valueOf(ch)) && curState == States.OPERATOR_OR_DELIMITER) {
                     temp = getCurrentToken();
                     break;
                 }
@@ -54,7 +50,7 @@ public class LexicalAnalyzer {
             }
             curPoint++;
         }
-        if ((temp.getType() == "END") && basePoint <= curPoint && curPoint == content.length()) {
+        if ((temp.getType().equals("END")) && basePoint <= curPoint && curPoint == content.length()) {
             temp = getCurrentToken();
         }
         curState = States.BEGIN;
@@ -93,5 +89,18 @@ public class LexicalAnalyzer {
         } else {
             return true;
         }
+    }
+
+    public List<Token> getTokenList() {
+        List<Token> tokens = new ArrayList<>();
+        while (true) {
+            Token t = LEXER.next();
+            if (t.getType() != "END") {
+                tokens.add(t);
+            } else {
+                break;
+            }
+        }
+        return tokens;
     }
 }

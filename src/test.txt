@@ -1,11 +1,11 @@
-var n,f;
+var a := 1;
+var b = 2;
+if(a > b)
+    var result = a;
 begin
-    n:=0;
-    f:=1;
-    while n <= 16 do
+    i:=0;
+    while i <= 2 do
     begin
-        n:=n+1;
-        f:=f*n;
+        i:=a+1;
     end;
 end.
-

@@ -31,7 +31,6 @@ public class TextReader {
         return content;
     }
 
-    //去除换行符
     public void cleanContent() {
         Matcher m = SPLITER_PATTERN.matcher(content);
         content = m.replaceAll("");
