@@ -14,10 +14,10 @@ public class main {
         LexicalAnalyzer lex = LexicalAnalyzer.getInstance();
         lex.beginAnalysis(content);
         List<Token> tokens = lex.getTokenList();
-        for (Token t : tokens) {
-            System.out.println(t.getValue());
-        }
-//        SyntacticAnalyzer parser = new SyntacticAnalyzer(tokens);
-//        parser.parse();
+//        for (Token t : tokens) {
+//            System.out.println(t.getValue());
+//        }
+        SyntacticAnalyzer parser = new SyntacticAnalyzer(tokens);
+        parser.parse();
     }
 }

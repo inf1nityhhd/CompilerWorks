@@ -1,1 +1,1 @@
-num + id / (id + num)
+num/id+(id)

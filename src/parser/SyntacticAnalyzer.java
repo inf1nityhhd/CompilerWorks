@@ -34,133 +34,113 @@ public class SyntacticAnalyzer {
         TERMINAL.add(")");
         TERMINAL.add("id");
         TERMINAL.add("num");
-        TERMINAL.add("#");
         NON_TERMINAL.add("E");
         NON_TERMINAL.add("E'");
         NON_TERMINAL.add("T");
         NON_TERMINAL.add("T'");
         NON_TERMINAL.add("F");
+    }
 
+    private void initTable(){
         List<String> temp = new ArrayList<>();
-        temp.add("E");
-        temp.add("T");
         HashMap<String, List<String>> tempMap = new HashMap<>();
+        temp.add("E'");
+        temp.add("T");
         tempMap.put("(", temp);
-        ANALYZE_TABLE.put("E", tempMap);
-
-        temp = new ArrayList<>();
-        temp.add("E");
-        temp.add("T");
-        tempMap = new HashMap<>();
-        tempMap.put("id", temp);
-        ANALYZE_TABLE.put("E", tempMap);
-
-        temp = new ArrayList<>();
-        temp.add("E");
-        temp.add("T");
-        tempMap = new HashMap<>();
-        tempMap.put("num", temp);
-        ANALYZE_TABLE.put("E", tempMap);
-
 
         temp = new ArrayList<>();
         temp.add("E'");
         temp.add("T");
-        temp.add("+");
+        tempMap.put("id", temp);
+
+        temp = new ArrayList<>();
+        temp.add("E'");
+        temp.add("T");
+        tempMap.put("num", temp);
+        ANALYZE_TABLE.put("E", tempMap);
+
+
         tempMap = new HashMap<>();
+        temp = new ArrayList<>();
+        temp.add("E'");
+        temp.add("T");
+        temp.add("+");
         tempMap.put("+", temp);
-        ANALYZE_TABLE.put("E'", tempMap);
 
         temp = new ArrayList<>();
         temp.add("E'");
         temp.add("T");
         temp.add("-");
-        tempMap = new HashMap<>();
         tempMap.put("-", temp);
-        ANALYZE_TABLE.put("E'", tempMap);
 
         temp = new ArrayList<>();
-        tempMap = new HashMap<>();
         tempMap.put(")", temp);
-        ANALYZE_TABLE.put("E'", tempMap);
 
         temp = new ArrayList<>();
-        tempMap = new HashMap<>();
         tempMap.put("#", temp);
         ANALYZE_TABLE.put("E'", tempMap);
 
 
         temp = new ArrayList<>();
+        tempMap = new HashMap<>();
         temp.add("T'");
         temp.add("F");
-        tempMap = new HashMap<>();
         tempMap.put("(", temp);
-        ANALYZE_TABLE.put("T", tempMap);
 
         temp = new ArrayList<>();
         temp.add("T'");
         temp.add("F");
-        tempMap = new HashMap<>();
         tempMap.put("id", temp);
-        ANALYZE_TABLE.put("T", tempMap);
 
         temp = new ArrayList<>();
         temp.add("T'");
         temp.add("F");
-        tempMap = new HashMap<>();
         tempMap.put("num", temp);
         ANALYZE_TABLE.put("T", tempMap);
 
 
         temp = new ArrayList<>();
+        tempMap = new HashMap<>();
         temp.add("T'");
         temp.add("F");
         temp.add("*");
-        tempMap = new HashMap<>();
         tempMap.put("*", temp);
-        ANALYZE_TABLE.put("T'", tempMap);
 
         temp = new ArrayList<>();
         temp.add("T'");
         temp.add("F");
-        temp.add("*");
-        tempMap = new HashMap<>();
+        temp.add("/");
         tempMap.put("/", temp);
-        ANALYZE_TABLE.put("T'", tempMap);
+
 
         temp = new ArrayList<>();
-        tempMap = new HashMap<>();
         tempMap.put("+", temp);
-        ANALYZE_TABLE.put("T'", tempMap);
 
         temp = new ArrayList<>();
-        tempMap = new HashMap<>();
         tempMap.put("-", temp);
-        ANALYZE_TABLE.put("T'", tempMap);
 
         temp = new ArrayList<>();
-        tempMap = new HashMap<>();
         tempMap.put(")", temp);
         ANALYZE_TABLE.put("T'", tempMap);
 
+        temp = new ArrayList<>();
+        tempMap.put("#", temp);
+        ANALYZE_TABLE.put("T'", tempMap);
+
 
         temp = new ArrayList<>();
-        temp.add(")'");
+        tempMap = new HashMap<>();
+        temp.add(")");
         temp.add("E");
         temp.add("(");
-        tempMap = new HashMap<>();
         tempMap.put("(", temp);
-        ANALYZE_TABLE.put("F", tempMap);
 
         temp = new ArrayList<>();
         temp.add("id");
-        tempMap = new HashMap<>();
         tempMap.put("id", temp);
-        ANALYZE_TABLE.put("F", tempMap);
 
         temp = new ArrayList<>();
         temp.add("num");
-        tempMap = new HashMap<>();
         tempMap.put("num", temp);
         ANALYZE_TABLE.put("F", tempMap);
     }
@@ -169,6 +149,7 @@ public class SyntacticAnalyzer {
         this.tokens = tokens;
         S.push("#");
         S.push("E");
+        initTable();
     }
 
     private String getCurrentToken() {
@@ -176,38 +157,42 @@ public class SyntacticAnalyzer {
     }
 
     public void parse() {
+        tokens.add(new Token("附加结束符#", "#"));
         boolean isStop = false;
         while (!isStop) {
-            curTop = S.peek();
-            System.out.println(curTop);
+            curTop = S.pop();
+            System.out.println("top "+curTop);
             String curToken = getCurrentToken();
+            System.out.println("token "+curToken);
             if (TERMINAL.contains(curTop)) {
                 if (curTop.equals(curToken)) {
                     advance();
                 } else {
                     error();
+                    break;
                 }
             } else if (curTop.equals("#")) {
                 if (curTop.equals(curToken)) {
                     isStop = true;
                 } else {
                     error();
+                    break;
                 }
             } else if (isInAnalyzeTable(curTop, curToken)) {
                 List<String> l = ANALYZE_TABLE.get(curTop).get(curToken);
-                S.pop();
                 for (String t : l) {
                     S.push(t);
                 }
             } else {
                 error();
+                break;
             }
         }
         System.out.println("分析结束");
     }
 
     private boolean isInAnalyzeTable(String t1, String t2) {
-        return ANALYZE_TABLE.containsKey(t1) && ANALYZE_TABLE.get(curTop).containsKey(t2);
+        return ANALYZE_TABLE.containsKey(t1) && ANALYZE_TABLE.get(t1).containsKey(t2);
     }
 
     private void advance() {

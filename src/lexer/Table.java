@@ -48,7 +48,8 @@ public class Table {
             NUMBER_TABLE.put(token.getValue(), NUMBER_TABLE_POINTER++);
         }
         Token temp = new Token(token.getType() + token.getValue(), String.valueOf(NUMBER_TABLE.get(token.getValue())));
-        return temp;
+        Token temp1 = new Token(token.getType(), token.getValue(), String.valueOf(NUMBER_TABLE.get(token.getValue())));
+        return temp1;
     }
 
     public static Token addIdentifier(Token token) {
@@ -56,7 +57,8 @@ public class Table {
             IDENTIFIER_TABLE.put(token.getValue(), IDENTIFIER_TABLE_POINTER++);
         }
         Token temp = new Token(token.getType() + token.getValue(), String.valueOf(IDENTIFIER_TABLE.get(token.getValue())));
-        return temp;
+        Token temp1 = new Token(token.getType(), token.getValue(), String.valueOf(IDENTIFIER_TABLE.get(token.getValue())));
+        return temp1;
     }
 
     public static boolean isOperator(String str) {
