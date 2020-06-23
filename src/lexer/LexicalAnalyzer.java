@@ -22,6 +22,8 @@ public class LexicalAnalyzer {
     public void beginAnalysis(String text) {
         this.content = text;
         this.curState = States.BEGIN;
+        this.basePoint = 0;
+        this.curPoint = 0;
     }
 
     public Token next() {
